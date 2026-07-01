@@ -1,0 +1,20 @@
+single_joint_odrive_bridge:
+  ros__parameters:
+    # Identity / wiring
+    joint_name: base_joint
+    odrive_ns: /odrive_axis0
+
+    # Gearbox / kinematics
+    gear_ratio: 80.0            # Harmonic gearbox reduction, motor turns per output turn
+    direction: 1.0               # +1.0 or -1.0, flips sign if joint moves the wrong way
+    zero_offset_turns: 0.0       # Motor turns that correspond to joint = 0 rad
+
+    # Publishing
+    publish_rate_hz: 50.0
+
+    # Safety
+    max_joint_step_rad: 0.05     # ~2.9 deg max commanded step per message, real hardware default
+    joint_min_rad: -1.57
+    joint_max_rad: 1.57
+    allow_large_commands: false
+    require_feedback_before_command: true

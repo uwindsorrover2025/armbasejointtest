@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<robot name="one_joint_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!--
+    Minimal one-joint robot model for bring-up verification only.
+    Geometry is not dimensionally accurate to the real rover arm; the
+    purpose is solely to confirm that /joint_states drives a real revolute
+    joint correctly in RViz, in radians, matching the calculated motor-to-
+    joint conversion done by single_joint_odrive_bridge.
+  -->
+
+  <material name="grey">
+    <color rgba="0.6 0.6 0.6 1.0"/>
+  </material>
+  <material name="orange">
+    <color rgba="0.9 0.5 0.1 1.0"/>
+  </material>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.15 0.15 0.10"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.15 0.15 0.10"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name="arm_link_1">
+    <visual>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.30"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.30"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!--
+    base_joint: revolute, axis Z, matches the joint_name/limits in
+    config/single_joint.yaml. Limits here are nominal for RViz/MoveIt
+    validation only; real safety clamping happens in the bridge node.
+  -->
+  <joint name="base_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="arm_link_1"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="20" velocity="0.5"/>
+  </joint>
+
+</robot>
